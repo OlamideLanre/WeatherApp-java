@@ -2,6 +2,7 @@ package my.first.weather;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,11 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,10 +24,10 @@ import java.text.DecimalFormat;
 import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
-    TextView Location, temp, FeelsLike, WindSpeed,Humidity, Description, uvIndex;
+    TextView Location, temp, FeelsLike, WindSpeed,Humidity, Description, uvIndex, sunset, sunrise;
     EditText City;
-    TextView date1, temp1, date2, temp2, date3, temp3, date4,temp4,date5,temp5,date6,temp6,date7,temp7;
-    Button reqBtn;
+    TextView date1, temp1, date2, temp2, date3, temp3, date4,temp4,date5,temp5;
+    FloatingActionButton SearchBtn;
     private final String API_KEY="UKZMQDUKGVPGQER6FNA4J9NSG";
 
 
@@ -37,16 +37,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        City=findViewById(R.id.City);
+//        City=findViewById(R.id.City);
         Location=findViewById(R.id.location);
         temp=findViewById(R.id.degree);
         FeelsLike=findViewById(R.id.FLvalue);
         WindSpeed=findViewById(R.id.WSvalue);
         Humidity=findViewById(R.id.Hvalue);
         Description=findViewById(R.id.description);
-        reqBtn=findViewById(R.id.button);
+        SearchBtn=findViewById(R.id.floating_action_button);
         uvIndex=findViewById(R.id.UVindex);
-
+        sunset=findViewById(R.id.sunSetValue);
+        sunrise=findViewById(R.id.sunRiseValue);
 
 //        FUTURE FORECAST DATE
         date1=findViewById(R.id.date1);
@@ -59,20 +60,16 @@ public class MainActivity extends AppCompatActivity {
         temp4=findViewById(R.id.Temp4);
         date5=findViewById(R.id.date5);
         temp5=findViewById(R.id.Temp5);
-        date6=findViewById(R.id.date6);
-        temp6=findViewById(R.id.Temp6);
-        date6=findViewById(R.id.date7);
-        temp7=findViewById(R.id.Temp7);
 
 
-        reqBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String cityToFetch=City.getText().toString();
-                getCurrentWeather(cityToFetch);
-                Toast.makeText(MainActivity.this, "city name: "+cityToFetch, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        reqBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String cityToFetch=City.getText().toString();
+//                getCurrentWeather(cityToFetch);
+//                Toast.makeText(MainActivity.this, "city name: "+cityToFetch, Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
@@ -81,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         final String REQUEST_URL=
                 "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?key=" + API_KEY ;
         client.get(REQUEST_URL, new AsyncHttpResponseHandler() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try{
@@ -101,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                             // comes in fahrenheit, second line is to convert to celcius.
                             double temprature=jsonweather.getDouble("temp");
                             double temperatureInCelsius=(temprature - 32)/1.8;
+//                            int temperatureInInteger=(int) temperatureInCelsius;
 
 
                             double feelslike=jsonweather.getDouble("feelslike");
@@ -112,17 +111,22 @@ public class MainActivity extends AppCompatActivity {
                             String location= jsonresponse.getString("address");
 
 //                            CONVERTING TO 1 DECIMAL PLACE
-                            DecimalFormat df = new DecimalFormat("#.#");
+                            DecimalFormat df = new DecimalFormat("#");
                             temperatureInCelsius = Double.parseDouble(df.format(temperatureInCelsius));
                             feelslikeInCelsius= Double.parseDouble(df.format(feelslikeInCelsius));
 
+                            String sunsetTime=jsonweather.getString("sunset");
+                            String sunriseTime=jsonweather.getString("sunrise");
+
                             Location.setText(location);
-                            temp.setText(String.valueOf(temperatureInCelsius));
+                            temp.setText(String.valueOf(temperatureInCelsius + "\u00B0"));
                             Description.setText(description);
                             FeelsLike.setText(String.valueOf(feelslikeInCelsius));
-                            Humidity.setText(String.valueOf(humidity +" %"));
-                            WindSpeed.setText(String.valueOf(windspeed +" km/h"));
+                            Humidity.setText(humidity +" %");
+                            WindSpeed.setText(windspeed +" km/h");
                             uvIndex.setText(String.valueOf(uvindex));
+                            sunrise.setText(sunriseTime);
+                            sunset.setText(sunsetTime);
 
 
 
@@ -145,45 +149,62 @@ public class MainActivity extends AppCompatActivity {
                             JSONArray jsonArray= jsonresponse.getJSONArray("days");
                             JSONObject jsondata=jsonArray.getJSONObject(1);
                             String date=jsondata.getString("datetime");
-                            double temprature=jsondata.getDouble("temp");
+                            double temprature=jsondata.getDouble("tempmin");
                             double temperatureInCelsius=(temprature - 32)/1.8;
-
-//                            CONVERTING TO 1 DECIMAL PLACE
-
                             temperatureInCelsius = Double.parseDouble(df.format(temperatureInCelsius));
 
-                            date1.setText(date);
-                            temp1.setText(String.valueOf(temperatureInCelsius));
+                            double maxTemperature=jsondata.getDouble("tempmax");
+                            double maxTemperatureInCel=(maxTemperature -32)/1.8;
+                            maxTemperatureInCel=Double.parseDouble(df.format(maxTemperatureInCel));
 
-//                            GETTING DATA @ INDEX 2
+//                            CONVERTING TO 1 DECIMAL PLACE
+                            date1.setText(date);
+                            temp1.setText(temperatureInCelsius +"/"+maxTemperatureInCel);
+
+//                            GETTING FORECAST @ INDEX 2
                             JSONObject jsondata2=jsonArray.getJSONObject(2);
                             String dateData2=jsondata2.getString("datetime");
-                            double temperature2=jsondata2.getDouble("temp");
-                            double temperatureInCelsius2=(temperature2 - 32)/1.8;
-                            temperatureInCelsius2 = Double.parseDouble(df.format(temperatureInCelsius2));
+                            double Mintemperature2=jsondata2.getDouble("tempmin");
+                            double MintemperatureInCelsius2=(Mintemperature2 - 32)/1.8;
+                            MintemperatureInCelsius2 = Double.parseDouble(df.format(MintemperatureInCelsius2));
+
+                            double maxTemperature2=jsondata2.getDouble("tempmax");
+                            double maxTemperatureInCel2=(maxTemperature2 -32)/1.8;
+                            maxTemperatureInCel2=Double.parseDouble(df.format(maxTemperatureInCel2));
+
 
                             date2.setText(dateData2);
-                            temp2.setText(String.valueOf(temperatureInCelsius2));
+                            temp2.setText(MintemperatureInCelsius2 +"/"+maxTemperatureInCel2);
 
 //                            DATA @ INDEX 3
                             JSONObject jsondata3=jsonArray.getJSONObject(3);
                             String dateData3=jsondata3.getString("datetime");
-                            double temperature3=jsondata3.getDouble("temp");
+                            double temperature3=jsondata3.getDouble("tempmin");
                             double temperatureInCelsius3=(temperature3 - 32)/1.8;
                             temperatureInCelsius3 = Double.parseDouble(df.format(temperatureInCelsius3));
 
+                            double maxTemp3=jsondata3.getDouble("tempmax");
+                            double maxTemp3InCel=(maxTemp3 - 32)/1.8;
+                            maxTemp3InCel=Double.parseDouble((df.format(maxTemp3InCel)));
+
                             date3.setText(dateData3);
-                            temp3.setText(String.valueOf(temperatureInCelsius3));
+                            temp3.setText(temperatureInCelsius3 +"/"+maxTemp3InCel);
 
 //                            DATA @ INDEX 4
                             JSONObject jsondata4=jsonArray.getJSONObject(4);
                             String dateData4=jsondata4.getString("datetime");
-                            double temperature4=jsondata4.getDouble("temp");
-                            double temperatureInCelsius4=(temperature4 - 32)/1.8;
-                            temperatureInCelsius4 = Double.parseDouble(df.format(temperatureInCelsius4));
+
+//                            minimum temp
+                            double Mintemperature4=jsondata4.getDouble("tempmin");
+                            double MintemperatureInCelsius4=(Mintemperature4 - 32)/1.8;
+                            MintemperatureInCelsius4 = Double.parseDouble(df.format(MintemperatureInCelsius4));
+//                            maximum temp
+                            double MaxTemperature4=jsondata4.getDouble("tempmax");
+                            double MaxTemperatureInCel=(MaxTemperature4 - 32)/1.8;
+                            MaxTemperatureInCel=Double.parseDouble(df.format(MaxTemperatureInCel));
 
                             date4.setText(dateData4);
-                            temp4.setText(String.valueOf(temperatureInCelsius4));
+                            temp4.setText(MintemperatureInCelsius4 +"/"+MaxTemperatureInCel);
 
 //                            DATA @ INDEX 5
                             JSONObject jsondata5=jsonArray.getJSONObject(5);
@@ -192,32 +213,12 @@ public class MainActivity extends AppCompatActivity {
                             double temperatureInCelsius5=(temperature5 - 32)/1.8;
                             temperatureInCelsius5 = Double.parseDouble(df.format(temperatureInCelsius5));
 
+                            double maxTemp5=jsondata5.getDouble("tempmax");
+                            double maxTemp5InCel=(maxTemp5 -32)/1.8;
+                            maxTemp5InCel=Double.parseDouble(df.format(maxTemp5InCel));
+
                             date5.setText(dateData5);
-                            temp5.setText(String.valueOf(temperatureInCelsius5));
-
-//                            DATA @ INDEX 6
-//                            JSONObject jsondata6=jsonArray.getJSONObject(6);
-//                            String dateData6=jsondata6.getString("datetime");
-//                            double temperature6=jsondata6.getDouble("temp");
-//                            double temperatureInCelsius6=(temperature6 - 32)/1.8;
-//                            temperatureInCelsius6 = Double.parseDouble(df.format(temperatureInCelsius6));
-//
-//                            date6.setText(dateData6);
-//                            temp6.setText(String.valueOf(temperatureInCelsius6));
-
- //                            DATA @ INDEX 7
-                            JSONObject jsondata7=jsonArray.getJSONObject(7);
-                            String dateData7=jsondata7.getString("datetime");
-                            double temprature7=jsondata7.getDouble("temp");
-                            double temperatureInCelsius7=(temprature7 - 32)/1.8;
-                            temperatureInCelsius7 = Double.parseDouble(df.format(temperatureInCelsius7));
-
-                            date7.setText(dateData7);
-                            temp7.setText(String.valueOf(temperatureInCelsius7));
-
-
-
-
+                            temp5.setText(temperatureInCelsius5 +"/"+ maxTemp5InCel);
 
                         }
                         else{

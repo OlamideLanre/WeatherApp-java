@@ -5,51 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/android_weather_dbg"
+    android:backgroundTint="@color/skyBlue"
     tools:context=".MainActivity">
 
-
-<!--    <com.google.android.material.card.MaterialCardView-->
-<!--        android:id="@+id/card"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="8dp">-->
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical">-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/weather_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            app:backgroundTint="@color/material_dynamic_primary70"
-            app:iconSize="25dp"
-            app:icon="@drawable/baseline_cloud_24"
-            android:gravity="center"/>
-
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/search_button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:backgroundTint="@color/material_dynamic_primary70"-->
-<!--            app:icon="@drawable/baseline_search_24"-->
-<!--            android:gravity="end|center"-->
-<!--            android:layout_marginStart="160dp"-->
-<!--            app:iconSize="30dp"-->
-<!--            />-->
-    </LinearLayout>
-
-<!--    </LinearLayout>-->
-
-<!--    </com.google.android.material.card.MaterialCardView>-->
 
 <RelativeLayout
     android:id="@+id/mainContainer"
@@ -156,150 +114,6 @@
             android:textSize="20sp"/>
     </LinearLayout>
 
-    <!--    &lt;!&ndash;VALUES CARD&ndash;&gt;-->
-<!--    <LinearLayout-->
-<!--        android:id="@+id/mainValuesLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        >-->
-
-<!--        &lt;!&ndash;  FEELS LIKE   CARD&ndash;&gt;-->
-<!--        <LinearLayout-->
-<!--            android:id="@+id/feelsLikeCard"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="5dp"-->
-<!--            android:layout_marginTop="190dp"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_marginBottom="8dp"-->
-<!--            android:background="#9076D1FF"-->
-<!--            android:orientation="vertical"-->
-<!--             -->
-<!--            >-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical"-->
-<!--                android:padding="14dp">-->
-
-<!--                &lt;!&ndash; Title, secondary and supporting text &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:id="@+id/feelslike"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="start"-->
-<!--                    android:text="Feels Like"-->
-<!--                    android:textAppearance="?attr/textAppearanceHeadline6"-->
-<!--                    android:textColor="@color/clearWhite"-->
-<!--                    android:textSize="17dp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/FLvalue"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="start"-->
-<!--                    android:layout_marginTop="11dp"-->
-<!--                    android:text="NA"-->
-<!--                    android:textAppearance="?attr/textAppearanceBody2"-->
-<!--                    android:textColor="@color/clearWhite"-->
-<!--                    android:textSize="20dp" />-->
-
-<!--            </LinearLayout>-->
-
-<!--        </LinearLayout>-->
-<!--        &lt;!&ndash;WIND SPEED CARD&ndash;&gt;-->
-<!--        <LinearLayout-->
-<!--            android:id="@+id/windCard"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:layout_marginTop="190dp"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_marginBottom="8dp"-->
-<!--            android:layout_toRightOf="@id/feelsLikeCard"-->
-<!--            android:background="#9076D1FF"-->
-<!--            android:orientation="vertical">-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical"-->
-<!--                android:padding="14dp">-->
-
-<!--                &lt;!&ndash; Title, secondary and supporting text &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:id="@+id/windspeed"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="start"-->
-<!--                    android:text="Wind speed"-->
-<!--                    android:textAppearance="?attr/textAppearanceHeadline6"-->
-<!--                    android:textColor="@color/clearWhite"-->
-<!--                    android:textSize="17dp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/WSvalue"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="start"-->
-<!--                    android:layout_marginTop="11dp"-->
-<!--                    android:text="NA"-->
-<!--                    android:textAppearance="?attr/textAppearanceBody2"-->
-<!--                    android:textColor="@color/clearWhite"-->
-<!--                    android:textSize="20dp" />-->
-
-<!--            </LinearLayout>-->
-
-<!--        </LinearLayout>-->
-
-<!--        &lt;!&ndash;    HUMIDITY CARD&ndash;&gt;-->
-<!--        <LinearLayout-->
-<!--            android:id="@+id/humidityCard"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:layout_marginTop="190dp"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_marginBottom="8dp"-->
-<!--            android:layout_toRightOf="@id/windCard"-->
-<!--            android:background="#9076D1FF"-->
-<!--            android:orientation="vertical">-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="118dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical"-->
-<!--                android:padding="14dp">-->
-
-<!--                &lt;!&ndash; Title, secondary and supporting text &ndash;&gt;-->
-<!--                <TextView-->
-<!--                    android:id="@+id/humidity"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="start"-->
-<!--                    android:text="Humidity"-->
-<!--                    android:textAppearance="?attr/textAppearanceHeadline6"-->
-<!--                    android:textColor="@color/clearWhite"-->
-<!--                    android:textSize="17dp" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/Hvalue"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="start"-->
-<!--                    android:layout_marginTop="11dp"-->
-<!--                    android:text="NA"-->
-<!--                    android:textAppearance="?attr/textAppearanceBody2"-->
-<!--                    android:textColor="@color/clearWhite"-->
-<!--                    android:textSize="20dp" />-->
-
-<!--            </LinearLayout>-->
-
-<!--        </LinearLayout>-->
-
-<!--    </LinearLayout>-->
-
     <!--    DAILY TIP-->
 <!--    <TextView-->
 <!--        android:id="@+id/dailyTip"-->
@@ -363,7 +177,7 @@
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/rain_icon"
+                    app:icon="@drawable/humidity_icon"
                     app:iconTint="@color/clearWhite" />
 
                 <TextView
@@ -388,99 +202,186 @@
             </LinearLayout>
 
         </LinearLayout>
-
-
     </com.google.android.material.card.MaterialCardView>
-
-
-
-
 </RelativeLayout>
+<!--    NEW CARD-->
+    <LinearLayout
+        android:id="@+id/card2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sevenDaysForecast"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="#B1BCBE"
+        app:strokeWidth="0dp"
+        android:layout_centerHorizontal="true"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical">
+
+            <!--SUNRISE CARD-->
+            <LinearLayout
+                android:id="@+id/sunriseCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/sunrise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="Sunrise"
+                    android:textColor="@color/mainBlue"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/sunRiseValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="0:00:00"
+                    android:textColor="#FFFF00"
+                    android:textSize="20sp"
+
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="20dp"
+            >
+
+            <!--SUNSET CARD-->
+            <LinearLayout
+                android:id="@+id/sunsetCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/sunset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sunset"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/mainBlue"
+                    android:textSize="20sp"
+                    />
+                <TextView
+                    android:id="@+id/sunSetValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="0:00:00"
+                    android:textColor="#FFFF00"
+                    android:textSize="20sp"
+
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <!--   LAYOUT FOR DAILY FORECAST-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/mainContainer"
-            android:layout_marginTop="10dp"
-            android:id="@+id/sevenDaysForecast"
-            android:background="#9076D1FF">
 
-            <!--    FORCAST DATe-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mainContainer"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="6dp"
+        android:text="Next 5 days"
+        android:textColor="@color/mainBlue"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/sevenDaysForecast"
+        android:layout_width="351dp"
+        android:layout_height="183dp"
+        android:layout_below="@id/mainContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="27dp">
+
+        <!--    FORCAST DATe-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+
             <LinearLayout
                 android:id="@+id/forecastDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/date1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24/7"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:text="NA"
+                        android:textColor="@color/clearWhite" />
 
                     <TextView
                         android:id="@+id/date2"
-                        android:layout_marginTop="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="25/7"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:layout_marginTop="15dp"
+                        android:text="NA"
+                        android:textColor="@color/clearWhite" />
 
                     <TextView
                         android:id="@+id/date3"
-                        android:layout_marginTop="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="25/7"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:layout_marginTop="15dp"
+                        android:text="NA"
+                        android:textColor="@color/clearWhite" />
 
                     <TextView
                         android:id="@+id/date4"
-                        android:layout_marginTop="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="25/7"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:layout_marginTop="15dp"
+                        android:text="NA"
+                        android:textColor="@color/clearWhite" />
 
                     <TextView
                         android:id="@+id/date5"
-                        android:layout_marginTop="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="25/7"
-                        android:textColor="@color/clearWhite"
-                        />
-
-                    <TextView
-                        android:id="@+id/date6"
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="25/7"
-                        android:textColor="@color/clearWhite"
-                        />
-
-                    <TextView
-                        android:id="@+id/date7"
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="25/7"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:layout_marginTop="15dp"
+                        android:text="NA"
+                        android:textColor="@color/clearWhite" />
 
 
                 </LinearLayout>
@@ -495,6 +396,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
                 android:layout_toRightOf="@id/forecastDate">
 
                 <LinearLayout
@@ -503,66 +405,40 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/day1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="day"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:id="@+id/icon1"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="0dp"
+                        android:background="@drawable/partly_cloudy" />
 
                     <TextView
                         android:id="@+id/day2"
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="day"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:layout_width="20dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/partly_cloudy"
+                        android:textColor="@color/clearWhite" />
 
                     <TextView
                         android:id="@+id/day3"
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="day"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/partly_cloudy" />
 
                     <TextView
                         android:id="@+id/day4"
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="day"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/partly_cloudy" />
 
                     <TextView
                         android:id="@+id/day5"
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="day"
-                        android:textColor="@color/clearWhite"
-                        />
-
-                    <TextView
-                        android:id="@+id/day6"
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="day"
-                        android:textColor="@color/clearWhite"
-                        />
-
-                    <TextView
-                        android:id="@+id/day7"
-                        android:layout_marginTop="4dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="day"
-                        android:textColor="@color/clearWhite"
-                        />
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/partly_cloudy" />
 
 
                 </LinearLayout>
@@ -577,98 +453,90 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@id/forecastDay">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="NA"
-                        android:textColor="@color/clearWhite"
                         android:id="@+id/Temp1"
-                        />
-
-                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="NA"
-                        android:textColor="@color/clearWhite"
+                        android:textColor="@color/clearWhite" />
+
+                    <TextView
                         android:id="@+id/Temp2"
-                        android:layout_marginTop="4dp"
-                        />
-
-                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:text="NA"
-                        android:textColor="@color/clearWhite"
+                        android:textColor="@color/clearWhite" />
+
+                    <TextView
                         android:id="@+id/Temp3"
-                        android:layout_marginTop="4dp"
-                        />
-
-                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:text="NA"
-                        android:textColor="@color/clearWhite"
+                        android:textColor="@color/clearWhite" />
+
+                    <TextView
                         android:id="@+id/Temp4"
-                        android:layout_marginTop="4dp"
-                        />
-
-                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:text="NA"
-                        android:textColor="@color/clearWhite"
+                        android:textColor="@color/clearWhite" />
+
+                    <TextView
                         android:id="@+id/Temp5"
-                        android:layout_marginTop="4dp"
-                        />
-
-                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
                         android:text="NA"
-                        android:textColor="@color/clearWhite"
-                        android:id="@+id/Temp6"
-                        android:layout_marginTop="4dp"
-                        />
+                        android:textColor="@color/clearWhite" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="NA"
-                        android:textColor="@color/clearWhite"
-                        android:id="@+id/Temp7"
-                        android:layout_marginTop="4dp"
-                        />
 
                 </LinearLayout>
-
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
+    <!--TOP NAV BAR-->
 
-
-
-    <!--TEXT FIEL AND BUTTON-->
-    <EditText
-        android:id="@+id/City"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="search city"
-        android:textColorHint="@color/clearWhite"
-        android:layout_marginTop="15dp"
-        android:layout_below="@id/sevenDaysForecast"/>
-
-    <Button
-        android:id="@+id/button"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/City"
-        android:layout_marginTop="34dp"
-        android:text="request" />
+        android:layout_below="@id/card2"
+        android:layout_gravity="bottom|right"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/mainBlue"
+        app:srcCompat="@drawable/baseline_search_24" />
+
+
+    <!--    <EditText-->
+<!--        android:id="@+id/City"-->
+<!--        android:layout_width="157dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/mainContainer"-->
+<!--        android:layout_marginTop="85dp"-->
+<!--        android:hint="search city"-->
+
+<!--        android:textColorHint="@color/clearWhite" />-->
+
+<!--        <Button-->
+<!--        android:id="@+id/button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/City"-->
+<!--        android:layout_marginTop="34dp"-->
+<!--        android:text="request" />-->
 
 
 </RelativeLayout>
