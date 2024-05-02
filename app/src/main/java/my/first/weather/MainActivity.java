@@ -3,6 +3,7 @@ package my.first.weather;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         date5=findViewById(R.id.date5);
         temp5=findViewById(R.id.Temp5);
 
+        SearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in= new Intent(MainActivity.this, SearchPage.class);
+                startActivity(in);
+
+            }
+        });
 
 //        reqBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
