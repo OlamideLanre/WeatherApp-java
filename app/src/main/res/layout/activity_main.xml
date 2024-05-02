@@ -8,6 +8,15 @@
     android:backgroundTint="@color/skyBlue"
     tools:context=".MainActivity">
 
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="W e a t h e r"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="30dp"-->
+<!--        android:textColor="@color/clearWhite"/>-->
+
 
 <RelativeLayout
     android:id="@+id/mainContainer"

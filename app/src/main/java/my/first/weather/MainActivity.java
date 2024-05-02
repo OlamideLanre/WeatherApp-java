@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        Intent receive= new Intent(MainActivity.this,SearchPage.class);
+//        startActivityForResult(receive,NEW_CITY_CODE);
+
+
 //        City=findViewById(R.id.City);
         Location=findViewById(R.id.location);
         temp=findViewById(R.id.degree);
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         date5=findViewById(R.id.date5);
         temp5=findViewById(R.id.Temp5);
 
+
         SearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +85,14 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(MainActivity.this, "city name: "+cityToFetch, Toast.LENGTH_SHORT).show();
 //            }
 //        });
+
+        String selectedCity=getIntent().getStringExtra("selectedCity");
+        if (selectedCity!=null){
+            getCurrentWeather(selectedCity);
+            Toast.makeText(this, "Fetching...", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(MainActivity.this, "No city selected", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -130,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                             Location.setText(location);
                             temp.setText(String.valueOf(temperatureInCelsius + "\u00B0"));
                             Description.setText(description);
-                            FeelsLike.setText(String.valueOf(feelslikeInCelsius));
+                            FeelsLike.setText(feelslikeInCelsius + "\u00B0");
                             Humidity.setText(humidity +" %");
                             WindSpeed.setText(windspeed +" km/h");
                             uvIndex.setText(String.valueOf(uvindex));
@@ -168,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
 //                            CONVERTING TO 1 DECIMAL PLACE
                             date1.setText(date);
-                            temp1.setText(temperatureInCelsius +"/"+maxTemperatureInCel);
+                            temp1.setText(temperatureInCelsius + "\u00B0" +"/"+maxTemperatureInCel + "\u00B0");
 
 //                            GETTING FORECAST @ INDEX 2
                             JSONObject jsondata2=jsonArray.getJSONObject(2);
@@ -183,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                             date2.setText(dateData2);
-                            temp2.setText(MintemperatureInCelsius2 +"/"+maxTemperatureInCel2);
+                            temp2.setText(MintemperatureInCelsius2 + "\u00B0" +"/"+maxTemperatureInCel2 + "\u00B0");
 
 //                            DATA @ INDEX 3
                             JSONObject jsondata3=jsonArray.getJSONObject(3);
@@ -197,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                             maxTemp3InCel=Double.parseDouble((df.format(maxTemp3InCel)));
 
                             date3.setText(dateData3);
-                            temp3.setText(temperatureInCelsius3 +"/"+maxTemp3InCel);
+                            temp3.setText(temperatureInCelsius3 + "\u00B0" +"/"+maxTemp3InCel + "\u00B0");
 
 //                            DATA @ INDEX 4
                             JSONObject jsondata4=jsonArray.getJSONObject(4);
@@ -213,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                             MaxTemperatureInCel=Double.parseDouble(df.format(MaxTemperatureInCel));
 
                             date4.setText(dateData4);
-                            temp4.setText(MintemperatureInCelsius4 +"/"+MaxTemperatureInCel);
+                            temp4.setText(MintemperatureInCelsius4 + "\u00B0" +"/"+MaxTemperatureInCel + "\u00B0");
 
 //                            DATA @ INDEX 5
                             JSONObject jsondata5=jsonArray.getJSONObject(5);
@@ -227,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                             maxTemp5InCel=Double.parseDouble(df.format(maxTemp5InCel));
 
                             date5.setText(dateData5);
-                            temp5.setText(temperatureInCelsius5 +"/"+ maxTemp5InCel);
+                            temp5.setText(temperatureInCelsius5 + "\u00B0" +"/"+ maxTemp5InCel + "\u00B0");
 
                         }
                         else{
@@ -248,20 +262,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    public void sevenDaysForecast(String city){
-//        AsyncHttpClient client= new AsyncHttpClient();
-//        final String REQUEST_URL=
-//                "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/" + city + "?key=" + API_KEY ;
-//        client.get(REQUEST_URL, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//
-//            }
-//        });
-//    }
 }
