@@ -7,42 +7,77 @@
     tools:context=".SearchPage"
     android:background="@color/skyBlue"
     >
-    <TextView
-        android:id="@+id/backButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/baseline_arrow_back_24"
-        android:backgroundTint="@color/mainBlue"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/backButton"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:background="@drawable/baseline_arrow_back_24"-->
+<!--        android:backgroundTint="@color/mainBlue"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="20dp"/>-->
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_toRightOf="@id/backButton"
-        android:id="@+id/outlinedTextField"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        app:startIconDrawable="@drawable/baseline_search_24"
-        android:hint="enter city"
-        app:hintTextColor="@color/clearWhite"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        app:boxStrokeColor="@color/clearWhite"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:layout_toRightOf="@id/backButton"-->
+<!--        android:id="@+id/outlinedTextField"-->
+<!--        android:layout_width="230dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:startIconDrawable="@drawable/baseline_search_24"-->
+<!--        android:hint="enter city"-->
+<!--        app:hintTextColor="@color/clearWhite"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        app:boxStrokeColor="@color/clearWhite"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">-->
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            />-->
+<!--        -->
 
-    </com.google.android.material.textfield.TextInputLayout>
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="268dp"
-        android:layout_height="355dp"
-        android:layout_below="@id/outlinedTextField"
+        android:layout_width="239dp"
+        android:layout_height="282dp"
+        android:layout_below="@id/autoTextView"
+        android:layout_marginTop="143dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="62dp"
         app:srcCompat="@drawable/city" />
+
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Weather"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="30dp"-->
+<!--        android:textColor="@color/clearWhite"/>-->
+
+
+    <AutoCompleteTextView
+        android:id="@+id/autoTextView"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
+        android:hint="enter city"
+        android:textColor="@color/clearWhite"
+        android:textColorHint="@color/mainBlue" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:layout_gravity="right|bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="142dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/mainBlue"
+        app:srcCompat="@drawable/baseline_cloud_24" />
 
 </RelativeLayout>

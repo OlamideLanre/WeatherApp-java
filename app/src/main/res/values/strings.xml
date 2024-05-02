@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Weather</string>
+    <string-array name="cities">
+        <item>Alaska</item>
+        <item>Abuja</item>
+        <item>Paris</item>
+        <item>Nambia</item>
+        <item>Kaduna</item>
+        <item>Karachi</item>
+        <item>Kano</item>
+        <item>Kathmandu</item>
+        <item>Benue</item>
+        <item>Lagos</item>
+        <item>Las Vegas</item>
+        <item>Berlin</item>
+        <item>Bern</item>
+        <item>Lima</item>
+        <item>Los Angeles</item>
+        <item>Chicago</item>
+        <item>Chennai</item>
+        <item>Chongqing</item>
+        <item>Toronto</item>
+        <item>Beijing</item>
+        <item>Manila</item>
+    </string-array>
 </resources>
