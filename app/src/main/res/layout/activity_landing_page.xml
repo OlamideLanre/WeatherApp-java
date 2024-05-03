@@ -9,18 +9,25 @@
     >
 
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="273dp"
-        app:srcCompat="@drawable/partly_cloudy" />
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="273dp"-->
+<!--        app:srcCompat="@drawable/partly_cloudy" />-->
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/GifimageView"
+        android:layout_width="353dp"
+        android:layout_height="272dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/worldglobe" />
 
     <RelativeLayout
-        android:layout_width="360dp"
+        android:layout_width="340dp"
         android:layout_height="350dp"
-        android:layout_below="@id/imageView2"
-        android:layout_marginTop="96dp"
+        android:layout_below="@id/GifimageView"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="152dp"
         android:background="@drawable/rounded_corners"
         android:backgroundTint="@color/skyBlue">
 
@@ -35,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Weather Forecast"
-                android:textColor="@color/mainBlue"
+                android:textColor="@color/white"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -47,16 +54,15 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/appName"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Discover the weather in your"
+                android:textColor="@color/yellow"
                 android:textSize="22sp"
-                android:textStyle="italic"
-
-                />
+                android:textStyle="italic" />
 
         </LinearLayout>
 
@@ -72,6 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="city and plan your day"
+                android:textColor="@color/yellow"
                 android:textSize="22sp"
                 android:textStyle="italic" />
 
@@ -89,22 +96,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="correctly!"
+                android:textColor="@color/yellow"
                 android:textSize="22sp"
                 android:textStyle="italic" />
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/textButton"
+            android:id="@+id/getStartedBtn"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="230dp"
-            android:layout_height="80dp"
+            android:layout_height="75dp"
             android:layout_below="@id/line3"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:backgroundTint="@color/mainBlue"
-            android:text="Get started"
-            android:textColor="@color/clearWhite" />
+            android:text="Continue"
+            android:textColor="@color/clearWhite"
+
+            />
 
     </RelativeLayout>
 
