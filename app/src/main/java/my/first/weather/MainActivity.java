@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +29,12 @@ import cz.msebera.android.httpclient.Header;
 public class MainActivity extends AppCompatActivity {
     TextView Location, temp, FeelsLike, WindSpeed,Humidity, Description, uvIndex, sunset, sunrise;
     EditText City;
-    TextView date1, temp1, date2, temp2, date3, temp3, date4,temp4,date5,temp5;
+    TextView date1, temp1, date2, temp2, date3, temp3, date4,temp4,date5,temp5,date0,temp0;
     FloatingActionButton SearchBtn;
+
+    ImageView Icon1,Icon2,Icon3,Icon4,Icon5,Icon0;
     private final String API_KEY="UKZMQDUKGVPGQER6FNA4J9NSG";
+//    ChangeIcon changeIcon=new ChangeIcon();
 
 
 
@@ -66,6 +70,16 @@ public class MainActivity extends AppCompatActivity {
         temp4=findViewById(R.id.Temp4);
         date5=findViewById(R.id.date5);
         temp5=findViewById(R.id.Temp5);
+        date0=findViewById(R.id.date0);
+        temp0=findViewById(R.id.Temp0);
+
+//        ICONS
+        Icon0=findViewById(R.id.icon0);
+        Icon1=findViewById(R.id.icon1);
+        Icon2=findViewById(R.id.icon2);
+        Icon3=findViewById(R.id.icon3);
+        Icon4=findViewById(R.id.icon4);
+        Icon5=findViewById(R.id.icon5);
 
 
         SearchBtn.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
                             String sunriseTime=jsonweather.getString("sunrise");
 
                             Location.setText(location);
-                            temp.setText(String.valueOf(temperatureInCelsius + "\u00B0"));
+                            temp.setText(temperatureInCelsius + "\u00B0");
+                            temp0.setText(temperatureInCelsius + "\u00B0");
                             Description.setText(description);
                             FeelsLike.setText(feelslikeInCelsius + "\u00B0");
                             Humidity.setText(humidity +" %");
@@ -150,6 +165,24 @@ public class MainActivity extends AppCompatActivity {
                             uvIndex.setText(String.valueOf(uvindex));
                             sunrise.setText(sunriseTime);
                             sunset.setText(sunsetTime);
+                            date0.setText("Today");
+
+
+                            ImageView[] forecastIcons = {Icon0,Icon1, Icon2, Icon3, Icon4, Icon5};
+
+                            JSONArray forecastArray = jsonresponse.getJSONArray("days");
+
+                            for (int i = 0; i < forecastIcons.length && i < forecastArray.length(); i++) {
+                                JSONObject forecast = forecastArray.getJSONObject(i);
+                                String icon = forecast.getString("icon");
+
+                                // Set the icon for the corresponding ImageView
+                                 int resID = getResources().getIdentifier(icon, "drawable", getPackageName());
+//                                int resID = getIconResourceID(icon); // Get the resource ID for the icon name
+                                if (resID != 0) {
+                                    forecastIcons[i].setImageResource(resID);
+                                }
+                            }
 
 
 
@@ -171,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jsonresponse= new JSONObject(responseBodyString);
                             JSONArray jsonArray= jsonresponse.getJSONArray("days");
                             JSONObject jsondata=jsonArray.getJSONObject(1);
+
                             String date=jsondata.getString("datetime");
                             double temprature=jsondata.getDouble("tempmin");
                             double temperatureInCelsius=(temprature - 32)/1.8;
