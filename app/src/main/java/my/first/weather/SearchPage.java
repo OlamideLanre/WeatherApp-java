@@ -13,6 +13,14 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class SearchPage extends AppCompatActivity {
 
@@ -22,12 +30,15 @@ public class SearchPage extends AppCompatActivity {
     FloatingActionButton backBtn;
 
     MainActivity mainActivity;
+
+    TextView searchIcon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_page);
 
         backBtn=findViewById(R.id.floating_backButton);
+        searchIcon=findViewById(R.id.spSearchIcon);
         mainActivity= new MainActivity();
 
         String[] cities=getResources().getStringArray(R.array.cities);
@@ -49,6 +60,17 @@ public class SearchPage extends AppCompatActivity {
                 }
 //                startActivity(searchIntenToast.makeText(SearchPage.this, "City selected: "+selectedCity, Toast.LENGTH_SHORT).show();t);
 
+            }
+        });
+
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent search2= new Intent(SearchPage.this, MainActivity.class);
+                String TextInput=autoCompleteTextView.getText().toString();
+                search2.putExtra("inputedcity",TextInput);
+                startActivity(search2);
+                Toast.makeText(SearchPage.this, "Inputed city", Toast.LENGTH_SHORT).show();
             }
         });
 

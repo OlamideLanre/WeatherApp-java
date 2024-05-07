@@ -65,7 +65,19 @@
         android:layout_marginTop="25dp"
         android:hint="enter city"
         android:textColor="@color/clearWhite"
-        android:textColorHint="@color/mainBlue" />
+        android:textColorHint="@color/mainBlue"
+
+        />
+
+    <TextView
+        android:id="@+id/spSearchIcon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/baseline_search_24"
+        android:layout_toRightOf="@id/autoTextView"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="-30dp"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_backButton"
