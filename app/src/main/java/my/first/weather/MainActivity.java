@@ -1,18 +1,25 @@
 package my.first.weather;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.loopj.android.http.AsyncHttpClient;
@@ -34,9 +41,15 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView Icon1,Icon2,Icon3,Icon4,Icon5,Icon0;
     private final String API_KEY="UKZMQDUKGVPGQER6FNA4J9NSG";
-//    ChangeIcon changeIcon=new ChangeIcon();
 
+    VideoView videoView;
+    Uri uri;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        videoView.start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
         Icon4=findViewById(R.id.icon4);
         Icon5=findViewById(R.id.icon5);
 
+//        SET BACKGROUND VIDEO
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        videoView=(VideoView) findViewById(R.id.bgVideo);
+
+
+
 
         SearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,21 +110,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        reqBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String cityToFetch=City.getText().toString();
-//                getCurrentWeather(cityToFetch);
-//                Toast.makeText(MainActivity.this, "city name: "+cityToFetch, Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         String selectedCity=getIntent().getStringExtra("selectedCity");
         if (selectedCity!=null){
             getCurrentWeather(selectedCity);
             Toast.makeText(this, "Fetching...", Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(MainActivity.this, "No city selected", Toast.LENGTH_SHORT).show();
+        }
+
+
+        String inputedCity=getIntent().getStringExtra("inputedcity");
+        if (inputedCity!=null){
+            getCurrentWeather(inputedCity);
+            Toast.makeText(this, "Fetching...", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -121,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     if (statusCode==200){
                         Log.i("weather: ","Request successful");
-                        Toast.makeText(MainActivity.this, "status code: "+statusCode, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MainActivity.this, "status code: "+statusCode, Toast.LENGTH_SHORT).show();
 
                         if (responseBody!=null){
                            String responseBodyString= new String(responseBody);
@@ -154,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
                             String sunsetTime=jsonweather.getString("sunset");
                             String sunriseTime=jsonweather.getString("sunrise");
+                            String Bgicon=jsonweather.getString("icon");
 
                             Location.setText(location);
                             temp.setText(temperatureInCelsius + "\u00B0");
@@ -168,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                             date0.setText("Today");
 
 
+//                            SETTING ICON OF FORECAST
                             ImageView[] forecastIcons = {Icon0,Icon1, Icon2, Icon3, Icon4, Icon5};
 
                             JSONArray forecastArray = jsonresponse.getJSONArray("days");
@@ -183,6 +201,43 @@ public class MainActivity extends AppCompatActivity {
                                     forecastIcons[i].setImageResource(resID);
                                 }
                             }
+//                              CHANGING BACKGROUND BASED ON ICON
+                            if (Bgicon.equals("rain")){
+                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.rain_vid));
+                                videoView.start();
+                            } else if (Bgicon.equals("clear-day")) {
+                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.clear_sky));
+                                videoView.start();
+                            } else if (Bgicon.equals("partly-cloudy-day")) {
+                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.partly_cloudy_vid));
+                                videoView.setVideoURI(uri);
+                                videoView.start();
+                            }else if(Bgicon.equals("thunderstorm")){
+                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.thunderstorm));
+                                videoView.start();
+                            } else if (Bgicon.equals("snow")) {
+                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.snow));
+                               videoView.start();
+                            }else {
+                                Toast.makeText(MainActivity.this, "not working", Toast.LENGTH_SHORT).show();
+                            }
+
+
+//                            NOTIFICATION FOR EXTREME WEATHER(WIP)
+//                            JSONArray Alerts= jsonresponse.getJSONArray("alerts");
+//                            JSONObject alertDay=Alerts.getJSONObject(0);
+//                            String alertEvent=alertDay.getString("event");
+//                            String alertHeading=alertDay.getString("headline");
+//                            NotificationCompat.Builder builder=(NotificationCompat.Builder)new NotificationCompat.Builder(getApplicationContext());
+//                            builder.setSmallIcon(R.drawable.baseline_cloud_24)
+//                            .setContentTitle(alertEvent)
+//                            .setContentText(alertHeading)
+//                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//                            NotificationManager notificationManager=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//                            notificationManager.notify(0,builder.build());
+
+
 
 
 
@@ -279,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                         else{
-                        Toast.makeText(MainActivity.this, "something happened", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -292,6 +347,34 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 Log.e("failure: ","message "+ statusCode);
                 Toast.makeText(MainActivity.this, "failed. statuscode: "+statusCode, Toast.LENGTH_SHORT).show();
+                if (statusCode==400){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                    // Set the message show for the Alert time
+                    builder.setMessage("City does not exist!");
+
+                    // Set Alert Title
+//                    builder.setTitle("Alert !");
+
+                    // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
+                    builder.setCancelable(true);
+                    // Create the Alert dialog
+                    AlertDialog alertDialog = builder.create();
+                    // Show the Alert Dialog box
+                    alertDialog.show();
+                }else if (statusCode==500||statusCode==404||statusCode==401||statusCode==0){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                    // Set the message show for the Alert time
+                    builder.setMessage("Something went wrong! \n Try again later");
+
+                    builder.setCancelable(true);
+                    // Create the Alert dialog
+                    AlertDialog alertDialog = builder.create();
+                    // Show the Alert Dialog box
+                    alertDialog.show();
+                }
+
             }
         });
     }
