@@ -1,12 +1,23 @@
 package my.first.weather;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +32,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -30,12 +44,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private final static int REQUEST_CODE=100;
+    LocationManager locationManager;
+//    LocationListener locationListener;
     TextView Location, temp, FeelsLike, WindSpeed,Humidity, Description, uvIndex, sunset, sunrise;
-    EditText City;
+//    EditText City;
     TextView date1, temp1, date2, temp2, date3, temp3, date4,temp4,date5,temp5,date0,temp0;
     FloatingActionButton SearchBtn;
 
@@ -55,10 +75,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        Intent receive= new Intent(MainActivity.this,SearchPage.class);
-//        startActivityForResult(receive,NEW_CITY_CODE);
-
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 //        City=findViewById(R.id.City);
         Location=findViewById(R.id.location);
@@ -99,6 +116,19 @@ public class MainActivity extends AppCompatActivity {
         videoView=(VideoView) findViewById(R.id.bgVideo);
 
 
+//requesting for permission
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+        != PackageManager.PERMISSION_GRANTED
+        ){
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            }, REQUEST_CODE);
+        }
+
+//        getting current location of user
+        getLocation();
+
+
 
 
         SearchBtn.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +155,61 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+//    GETTING USERS CURRENT LOCATION
+    public void getLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            try {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, locationListener);
+                    Toast.makeText(this, "GPS provider enabled. Requesting location updates...", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "GPS provider not enabled. Please enable it in settings.", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(this, "Location permission not granted.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull android.location.Location location) {
+            Log.d("Message: ", "Latitude " + location.getLatitude());
+            Log.d("Message: ", "Longitude " + location.getLongitude());
+            try {
+                Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                String city = addressList.get(0).getLocality();
+                getCurrentWeather(city);
+                Toast.makeText(MainActivity.this, "City: " + city, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==REQUEST_CODE){
+            if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                getLocation();
+//                Toast.makeText(this, "onRequestPermission()", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setMessage("Permission required");
+            builder.setCancelable(true);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+    }
+
+
 
     public void getCurrentWeather(String city){
         AsyncHttpClient client = new AsyncHttpClient();
@@ -218,8 +303,9 @@ public class MainActivity extends AppCompatActivity {
                             } else if (Bgicon.equals("snow")) {
                                 videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.snow));
                                videoView.start();
-                            }else {
-                                Toast.makeText(MainActivity.this, "not working", Toast.LENGTH_SHORT).show();
+                            }else if (Bgicon.equals("cloudy")){
+                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cloudy));
+                                videoView.start();
                             }
 
 
@@ -230,8 +316,8 @@ public class MainActivity extends AppCompatActivity {
 //                            String alertHeading=alertDay.getString("headline");
 //                            NotificationCompat.Builder builder=(NotificationCompat.Builder)new NotificationCompat.Builder(getApplicationContext());
 //                            builder.setSmallIcon(R.drawable.baseline_cloud_24)
-//                            .setContentTitle(alertEvent)
-//                            .setContentText(alertHeading)
+//                            .setContentTitle("alertEvent")
+//                            .setContentText("alertHeading")
 //                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 //
 //                            NotificationManager notificationManager=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -340,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 //                Log.i(LOGCAT,"Successful, status code: "+statusCode);
-                Toast.makeText(MainActivity.this, "successful, status code: "+statusCode, Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, "successful, status code: "+statusCode, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -349,34 +435,23 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "failed. statuscode: "+statusCode, Toast.LENGTH_SHORT).show();
                 if (statusCode==400){
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-                    // Set the message show for the Alert time
                     builder.setMessage("City does not exist!");
-
-                    // Set Alert Title
-//                    builder.setTitle("Alert !");
-
-                    // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
+                    // Set Cancelable true for when the user clicks on the outside the Dialog Box then it will disappear
                     builder.setCancelable(true);
-                    // Create the Alert dialog
                     AlertDialog alertDialog = builder.create();
-                    // Show the Alert Dialog box
                     alertDialog.show();
                 }else if (statusCode==500||statusCode==404||statusCode==401||statusCode==0){
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-                    // Set the message show for the Alert time
                     builder.setMessage("Something went wrong! \n Try again later");
-
                     builder.setCancelable(true);
                     // Create the Alert dialog
                     AlertDialog alertDialog = builder.create();
-                    // Show the Alert Dialog box
                     alertDialog.show();
                 }
 
             }
         });
     }
+
 
 }
