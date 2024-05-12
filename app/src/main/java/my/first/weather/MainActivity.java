@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity{
 
     VideoView videoView;
     Uri uri;
-
+     boolean manuallySelectedLocation = false;
     @Override
     protected void onResume() {
         super.onResume();
@@ -128,9 +128,6 @@ public class MainActivity extends AppCompatActivity{
 //        getting current location of user
         getLocation();
 
-
-
-
         SearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,15 +138,18 @@ public class MainActivity extends AppCompatActivity{
         });
 
 
+//        Handling search for selected city
         String selectedCity=getIntent().getStringExtra("selectedCity");
         if (selectedCity!=null){
+            manuallySelectedLocation=true;
             getCurrentWeather(selectedCity);
             Toast.makeText(this, "Fetching...", Toast.LENGTH_LONG).show();
         }
 
-
+//      Handling search when city is typed
         String inputedCity=getIntent().getStringExtra("inputedcity");
         if (inputedCity!=null){
+            manuallySelectedLocation=true;
             getCurrentWeather(inputedCity);
             Toast.makeText(this, "Fetching...", Toast.LENGTH_SHORT).show();
         }
@@ -159,16 +159,24 @@ public class MainActivity extends AppCompatActivity{
 //    GETTING USERS CURRENT LOCATION
     public void getLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            try {
-                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, locationListener);
-                    Toast.makeText(this, "GPS provider enabled. Requesting location updates...", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "GPS provider not enabled. Please enable it in settings.", Toast.LENGTH_SHORT).show();
+            if (!manuallySelectedLocation){
+                try {
+                    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, locationListener);
+                        Toast.makeText(this, "GPS provider enabled. Requesting location updates...", Toast.LENGTH_SHORT).show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle("Alert!");
+                        builder.setMessage("GPS provider not enabled. \n Please enable it in settings.");
+                        builder.setCancelable(true);
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+//                        Toast.makeText(this, "GPS provider not enabled. Please enable it in settings.", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         } else {
             Toast.makeText(this, "Location permission not granted.", Toast.LENGTH_SHORT).show();
@@ -180,14 +188,16 @@ public class MainActivity extends AppCompatActivity{
         public void onLocationChanged(@NonNull android.location.Location location) {
             Log.d("Message: ", "Latitude " + location.getLatitude());
             Log.d("Message: ", "Longitude " + location.getLongitude());
-            try {
-                Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-                List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                String city = addressList.get(0).getLocality();
-                getCurrentWeather(city);
-                Toast.makeText(MainActivity.this, "City: " + city, Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (!manuallySelectedLocation){
+                try {
+                    Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                    List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    String city = addressList.get(0).getLocality();
+                    getCurrentWeather(city);
+//                    Toast.makeText(MainActivity.this, "City: " + city, Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     };
@@ -272,9 +282,7 @@ public class MainActivity extends AppCompatActivity{
 
 //                            SETTING ICON OF FORECAST
                             ImageView[] forecastIcons = {Icon0,Icon1, Icon2, Icon3, Icon4, Icon5};
-
                             JSONArray forecastArray = jsonresponse.getJSONArray("days");
-
                             for (int i = 0; i < forecastIcons.length && i < forecastArray.length(); i++) {
                                 JSONObject forecast = forecastArray.getJSONObject(i);
                                 String icon = forecast.getString("icon");
