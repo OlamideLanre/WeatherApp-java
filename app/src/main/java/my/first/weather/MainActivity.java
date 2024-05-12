@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +19,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -65,6 +70,8 @@ public class MainActivity extends AppCompatActivity{
     VideoView videoView;
     Uri uri;
      boolean manuallySelectedLocation = false;
+     String CHANNELID="CHANNEL_ID_NOTIFICATION";
+//     Context context;
     @Override
     protected void onResume() {
         super.onResume();
@@ -154,7 +161,16 @@ public class MainActivity extends AppCompatActivity{
             Toast.makeText(this, "Fetching...", Toast.LENGTH_SHORT).show();
         }
 
+        //    CHECKING NOTIFICATION PERMISSION
+//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
+//            if (ContextCompat.checkSelfPermission(MainActivity.this,
+//                    Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED){
+//                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
+//            }
+//        }
+
     }
+
 
 //    GETTING USERS CURRENT LOCATION
     public void getLocation() {
@@ -219,6 +235,38 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+//NOTIFICATION FOR EXTREME WEATHER
+    public void weatherNotification(Context context, String event,String heading) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNELID,
+                    "Default Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Vibrating the phone
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator != null) {
+            vibrator.vibrate(1000);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNELID);
+        builder.setSmallIcon(R.drawable.baseline_cloud_24)
+                .setContentTitle(event)
+                .setContentText(heading)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, builder.build());
+
+        // Play notification sound
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(context, notification);
+        r.play();
+    }
+
 
 
     public void getCurrentWeather(String city){
@@ -232,6 +280,7 @@ public class MainActivity extends AppCompatActivity{
                 try{
                     if (statusCode==200){
                         Log.i("weather: ","Request successful");
+//                        weatherNotification(getApplicationContext(),"Rain","It will rain soon");
 //                        Toast.makeText(MainActivity.this, "status code: "+statusCode, Toast.LENGTH_SHORT).show();
 
                         if (responseBody!=null){
@@ -309,7 +358,7 @@ public class MainActivity extends AppCompatActivity{
                                 videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.thunderstorm));
                                 videoView.start();
                             } else if (Bgicon.equals("snow")) {
-                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.snow));
+                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.snow_vid));
                                videoView.start();
                             }else if (Bgicon.equals("cloudy")){
                                 videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cloudy));
@@ -318,21 +367,11 @@ public class MainActivity extends AppCompatActivity{
 
 
 //                            NOTIFICATION FOR EXTREME WEATHER(WIP)
-//                            JSONArray Alerts= jsonresponse.getJSONArray("alerts");
-//                            JSONObject alertDay=Alerts.getJSONObject(0);
-//                            String alertEvent=alertDay.getString("event");
-//                            String alertHeading=alertDay.getString("headline");
-//                            NotificationCompat.Builder builder=(NotificationCompat.Builder)new NotificationCompat.Builder(getApplicationContext());
-//                            builder.setSmallIcon(R.drawable.baseline_cloud_24)
-//                            .setContentTitle("alertEvent")
-//                            .setContentText("alertHeading")
-//                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//
-//                            NotificationManager notificationManager=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//                            notificationManager.notify(0,builder.build());
-
-
-
+                            JSONArray Alerts= jsonresponse.getJSONArray("alerts");
+                            JSONObject alertDay=Alerts.getJSONObject(0);
+                            String alertEvent=alertDay.getString("event");
+                            String alertHeading=alertDay.getString("headline");
+                            weatherNotification(getApplicationContext(),alertEvent,alertHeading);
 
 
                         }else {
