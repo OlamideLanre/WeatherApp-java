@@ -19,6 +19,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -33,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity{
 //    EditText City;
     TextView date1, temp1, date2, temp2, date3, temp3, date4,temp4,date5,temp5,date0,temp0;
     FloatingActionButton SearchBtn;
+    RelativeLayout parent;
 
     ImageView Icon1,Icon2,Icon3,Icon4,Icon5,Icon0;
     private final String API_KEY="UKZMQDUKGVPGQER6FNA4J9NSG";
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity{
     VideoView videoView;
     Uri uri;
      boolean manuallySelectedLocation = false;
+     boolean defaultBackground=false;
      String CHANNELID="CHANNEL_ID_NOTIFICATION";
 //     Context context;
     @Override
@@ -78,6 +82,32 @@ public class MainActivity extends AppCompatActivity{
         videoView.start();
     }
 
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        videoView.start();
+////        Toast.makeText(this, "on start", Toast.LENGTH_SHORT).show();
+//    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        videoView.pause();
+    }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        videoView.start();
+//    }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        videoView.pause();
+//    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +115,7 @@ public class MainActivity extends AppCompatActivity{
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 //        City=findViewById(R.id.City);
+        parent=findViewById(R.id.parentLayout);
         Location=findViewById(R.id.location);
         temp=findViewById(R.id.degree);
         FeelsLike=findViewById(R.id.FLvalue);
@@ -118,10 +149,18 @@ public class MainActivity extends AppCompatActivity{
         Icon4=findViewById(R.id.icon4);
         Icon5=findViewById(R.id.icon5);
 
+//        SET DEFAULT BACKGROUND
+//        parent.setBackgroundResource(R.drawable.android_weather_dbg);
+
 //        SET BACKGROUND VIDEO
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         videoView=(VideoView) findViewById(R.id.bgVideo);
-
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setLooping(true);
+            }
+        });
 
 //requesting for permission
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -180,7 +219,8 @@ public class MainActivity extends AppCompatActivity{
                     locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, locationListener);
-                        Toast.makeText(this, "GPS provider enabled. Requesting location updates...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Requesting location updates...This might take some time", Toast.LENGTH_LONG).show();
+
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle("Alert!");
@@ -195,7 +235,8 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         } else {
-            Toast.makeText(this, "Location permission not granted.", Toast.LENGTH_SHORT).show();
+            Log.d("Permission denied", "Location permission not granted");
+//            Toast.makeText(this, "Location permission not granted.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -209,6 +250,8 @@ public class MainActivity extends AppCompatActivity{
                     Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                     List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                     String city = addressList.get(0).getLocality();
+                    String c=addressList.get(0).getCountryName();
+//                    Toast.makeText(MainActivity.this, "country name: "+c, Toast.LENGTH_SHORT).show();
                     getCurrentWeather(city);
 //                    Toast.makeText(MainActivity.this, "City: " + city, Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -305,7 +348,7 @@ public class MainActivity extends AppCompatActivity{
                             double humidity=jsonweather.getDouble("humidity");
                             double windspeed=jsonweather.getDouble("windspeed");
                             int uvindex=jsonweather.getInt("uvindex");
-                            String location= jsonresponse.getString("address");
+                            String location= jsonresponse.getString("resolvedAddress");
 
 //                            CONVERTING TO 1 DECIMAL PLACE
                             DecimalFormat df = new DecimalFormat("#");
@@ -328,7 +371,6 @@ public class MainActivity extends AppCompatActivity{
                             sunset.setText(sunsetTime);
                             date0.setText("Today");
 
-
 //                            SETTING ICON OF FORECAST
                             ImageView[] forecastIcons = {Icon0,Icon1, Icon2, Icon3, Icon4, Icon5};
                             JSONArray forecastArray = jsonresponse.getJSONArray("days");
@@ -344,26 +386,29 @@ public class MainActivity extends AppCompatActivity{
                                 }
                             }
 //                              CHANGING BACKGROUND BASED ON ICON
-                            if (Bgicon.equals("rain")){
-                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.rain_vid));
-                                videoView.start();
-                            } else if (Bgicon.equals("clear-day")) {
-                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.clear_sky));
-                                videoView.start();
-                            } else if (Bgicon.equals("partly-cloudy-day")) {
-                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.partly_cloudy_vid));
-                                videoView.setVideoURI(uri);
-                                videoView.start();
-                            }else if(Bgicon.equals("thunderstorm")){
-                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.thunderstorm));
-                                videoView.start();
-                            } else if (Bgicon.equals("snow")) {
-                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.snow_vid));
-                               videoView.start();
-                            }else if (Bgicon.equals("cloudy")){
-                                videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cloudy));
-                                videoView.start();
-                            }
+                                if (Bgicon.equals("rain")) {
+                                    videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.rain_vid));
+                                    videoView.start();
+                                } else if (Bgicon.equals("clear-day")) {
+                                    videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.clear_sky));
+                                    videoView.start();
+                                } else if (Bgicon.equals("partly-cloudy-day")) {
+                                    videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.partly_cloudy_vid));
+                                    videoView.setVideoURI(uri);
+                                    videoView.start();
+                                } else if (Bgicon.equals("thunderstorm")) {
+                                    videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.thunderstorm));
+                                    videoView.start();
+                                } else if (Bgicon.equals("snow")) {
+                                    videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.snow_vid));
+                                    videoView.start();
+                                } else if (Bgicon.equals("cloudy")) {
+                                    videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cloudy));
+                                    videoView.start();
+                                } else {
+                                    parent.setBackgroundResource(R.drawable.android_weather_dbg);
+                                }
+
 
 
 //                            NOTIFICATION FOR EXTREME WEATHER(WIP)
@@ -378,7 +423,7 @@ public class MainActivity extends AppCompatActivity{
                             Toast.makeText(MainActivity.this, "something went wrong", Toast.LENGTH_SHORT).show();
                         }
                     }else {
-                        Toast.makeText(MainActivity.this, "1something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }catch(Exception e){
                     e.printStackTrace();
@@ -479,16 +524,18 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 Log.e("failure: ","message "+ statusCode);
-                Toast.makeText(MainActivity.this, "failed. statuscode: "+statusCode, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "failed. statuscode: "+statusCode, Toast.LENGTH_SHORT).show();
                 if (statusCode==400){
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("City does not exist!");
+                    builder.setTitle("City does not exist!");
+                    builder.setMessage("Enter a valid city name");
                     // Set Cancelable true for when the user clicks on the outside the Dialog Box then it will disappear
                     builder.setCancelable(true);
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 }else if (statusCode==500||statusCode==404||statusCode==401||statusCode==0){
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("Error");
                     builder.setMessage("Something went wrong! \n Try again later");
                     builder.setCancelable(true);
                     // Create the Alert dialog

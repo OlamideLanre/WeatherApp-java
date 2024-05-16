@@ -2,6 +2,7 @@ package my.first.weather;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -51,12 +52,12 @@ public class SearchPage extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String selectedCity=(String) adapterView.getItemAtPosition(position);
                 if (selectedCity.isEmpty()){
-                    Toast.makeText(SearchPage.this, "Select a city", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchPage.this, "Select a city or Enable GPS", Toast.LENGTH_LONG).show();
                 }else{
                     Intent searchIntent=new Intent(SearchPage.this,MainActivity.class);
                     searchIntent.putExtra("selectedCity",selectedCity);
                     startActivity(searchIntent);
-                    Toast.makeText(SearchPage.this, "City selected: "+selectedCity, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SearchPage.this, "City selected: "+selectedCity, Toast.LENGTH_SHORT).show();
                 }
 //                startActivity(searchIntenToast.makeText(SearchPage.this, "City selected: "+selectedCity, Toast.LENGTH_SHORT).show();t);
 
@@ -66,11 +67,21 @@ public class SearchPage extends AppCompatActivity {
         searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent search2= new Intent(SearchPage.this, MainActivity.class);
-                String TextInput=autoCompleteTextView.getText().toString();
-                search2.putExtra("inputedcity",TextInput);
-                startActivity(search2);
-                Toast.makeText(SearchPage.this, "Inputed city", Toast.LENGTH_SHORT).show();
+                if (autoCompleteTextView.getText().toString().trim().equals("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SearchPage.this);
+                    builder.setTitle("Field cannot be empty");
+                    builder.setMessage("Enter a city!");
+                    // Set Cancelable true for when the user clicks on the outside the Dialog Box then it will disappear
+                    builder.setCancelable(true);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }else{
+                    Intent search2= new Intent(SearchPage.this, MainActivity.class);
+                    String TextInput=autoCompleteTextView.getText().toString();
+                    search2.putExtra("inputedcity",TextInput);
+                    startActivity(search2);
+                }
+//                Toast.makeText(SearchPage.this, "Inputed city", Toast.LENGTH_SHORT).show();
             }
         });
 
